@@ -79,7 +79,16 @@ export default {
         .put(`http://127.0.0.1:3000/marcadores/${this.marcador.id}`, this.marcador)
         .then(response => {
             console.log(response);
-           
+            let posicion = this.lista_marcadores.findIndex(
+              marcador => marcador.id == this.marcador.id
+            );
+            this.lista_marcadores.splice(posicion, 1, this.marcador);
+            this.marcador = {
+              url: "",
+              nombre: "",
+              descripcion: "",
+              acciones: true
+          };
         })
         .catch(error => {
             console.log(error);

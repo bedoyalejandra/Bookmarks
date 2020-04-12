@@ -36,7 +36,7 @@
         </b-form-group>
 
         <b-button type="submit" block variant="danger" v-if="!enEdicion">Crear marcador</b-button>
-        <b-button @click="actualizarMarcador()" variant="primary" v-else>Actualizar marcador</b-button>
+        <b-button @click="actualizarMarcador()" block variant="danger" v-else>Actualizar marcador</b-button>
       </b-form>
 
       <div class="containerTitle">
