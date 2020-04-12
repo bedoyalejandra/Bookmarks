@@ -1,16 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
-const { validarMarcador, guardarMarcador, consultarMarcador, eliminarMarcador, editarMarcador } = require("../controllers/marcadores");
+const { validarMarcador, guardarMarcador, consultarMarcador,consultarMarcadores, eliminarMarcador, editarMarcador } = require("../controllers/marcadores");
 
 /**
  * Obtener todas los marcadores
  */
 router.get("/marcadores", (req, res) => {
-    consultarMarcador()
+    consultarMarcadores()
     .then(respuestaDB => {
       let registros = respuestaDB.rows;
-      res.send({ ok: true, info: registros, mensaje: "marcadores consultad0s" });
+      res.send({ ok: true, info: registros, mensaje: "marcadores consultados" });
+    
     })
     .catch(error => {
       res.send(error);
@@ -18,11 +19,27 @@ router.get("/marcadores", (req, res) => {
     
 });
 
+/**
+ * Obtener un solo marcador
+ */
+router.get("/marcadores/:id", (req, res) => {
+  let info_marcador = req.params.id;
+  consultarMarcador(info_marcador)
+  .then(respuestaDB => {
+    let registros = respuestaDB.rows;
+    res.send({ ok: true, info: registros, mensaje: "marcador consultado" });
+  
+  })
+  .catch(error => {
+    res.send(error);
+  });
+  
+});
 
 /**
  * Guarda una marcador
  */
-router.post("/", (req, res) => {
+router.post("/nuevo-marcador", (req, res) => {
   try {
     //Capturar el body desde la solicitud
     let info_marcador = req.body;
@@ -49,7 +66,7 @@ router.post("/", (req, res) => {
 /**
  * Eliminar un marcador
  */
-router.delete("/:id", (req, res) => {
+router.delete("/marcadores/:id", (req, res) => {
     try {
       //Capturar el body desde la solicitud
       let info_marcador = req.params.id;
@@ -71,15 +88,16 @@ router.delete("/:id", (req, res) => {
   });
 
   /**
- * Eliminar un marcador
+ * Actualizar un marcador
  */
-router.put("/", (req, res) => {
+router.put("/marcadores/:id", (req, res) => {
     try {
       //Capturar el body desde la solicitud
+      let id = req.params.id;
       let info_marcador = req.body;
   
       // Actualiza el marcador en base de datos
-      editarMarcador(info_marcador)
+      editarMarcador(info_marcador, id)
         .then(respuestaDB => {
           res.send({ ok: true, mensaje: "Marcador editado", info: info_marcador });
         })

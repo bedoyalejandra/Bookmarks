@@ -12,6 +12,10 @@ export default {
     ],
   
   },
+  server: {
+    port: 8000, // default: 3000
+    host: '0.0.0.0' // default: localhost
+  },
   /*
   ** Customize the progress-bar color
   */
@@ -37,7 +41,15 @@ export default {
   modules: [
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
+  proxy: {
+    '/api/': { target: 'https://api.example.com/', pathRewrite: {'^/api/': ''}, changeOrigin: true }
+  },
+  axios: {
+    proxy: true
+  },  
   /*
   ** Build configuration
   */

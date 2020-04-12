@@ -21,18 +21,26 @@ let validarMarcador = marcador => {
 let guardarMarcador = async marcador => {
   let _servicio = new ServicioPg();
   let sql = `INSERT INTO public.marcadores(
-               url, nombre, descripcion)
+               url, nombre, descripcion, acciones)
               VALUES (
                   '${marcador.url}',
                   '${marcador.nombre}',
-                  '${marcador.descripcion}');`;
+                  '${marcador.descripcion}',
+                  TRUE);`;
   let respuesta = await _servicio.ejecutarSql(sql);
   return respuesta;
 };
 
-let consultarMarcador = async () => {
+let consultarMarcadores = async () => {
   let _servicio = new ServicioPg();
   let sql = `SELECT * FROM marcadores`;
+  let respuesta = await _servicio.ejecutarSql(sql);
+  return respuesta;
+};
+
+let consultarMarcador = async (id) => {
+  let _servicio = new ServicioPg();
+  let sql = `SELECT * FROM marcadores WHERE id = '${id}'`;
   let respuesta = await _servicio.ejecutarSql(sql);
   return respuesta;
 };
@@ -44,12 +52,13 @@ let eliminarMarcador = id => {
     return respuesta;
 };
 
-let editarMarcador = async marcador => {
+let editarMarcador = async (marcador, id) => {
     let _servicio = new ServicioPg();
     let sql = `UPDATE marcadores set url = '${marcador.url}',
                  nombre = '${marcador.nombre}',
-                 descripcion = '${marcador.descripcion}' WHERE id='${marcador.id}'`;
+                 descripcion = '${marcador.descripcion}',
+                 acciones = TRUE WHERE id='${id}'`;
     let respuesta = await _servicio.ejecutarSql(sql);
     return respuesta;
 };
-module.exports = { validarMarcador, guardarMarcador, consultarMarcador, eliminarMarcador, editarMarcador };
+module.exports = { validarMarcador, guardarMarcador, consultarMarcador, consultarMarcadores, eliminarMarcador, editarMarcador };
